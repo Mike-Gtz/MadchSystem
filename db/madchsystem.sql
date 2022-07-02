@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-07-2022 a las 02:04:59
+-- Tiempo de generación: 02-07-2022 a las 14:52:50
 -- Versión del servidor: 10.4.19-MariaDB
 -- Versión de PHP: 7.4.19
 
@@ -39,9 +39,7 @@ CREATE TABLE `proyectos` (
 --
 
 INSERT INTO `proyectos` (`idProyecto`, `nombreProyecto`, `descripcion`, `status`) VALUES
-(1, 'Madch System', 'Pagina Web para promocionar nuestros servicios', 1),
-(2, 'TAQ Editado', 'InventariosTAQ doblemente editado', 1),
-(3, 'prueba', 'sdsadsadaewdewdwedewdewde', 0);
+(1, 'Madch System', 'Pagina Web para promocionar nuestros servicios', 1);
 
 -- --------------------------------------------------------
 
@@ -86,8 +84,7 @@ CREATE TABLE `servicios` (
 --
 
 INSERT INTO `servicios` (`idServ`, `nombreServ`, `status`) VALUES
-(1, 'creacion de web', 1),
-(2, 'prueba reedit', 1);
+(1, 'creacion de web', 1);
 
 -- --------------------------------------------------------
 
@@ -100,6 +97,7 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(250) DEFAULT NULL,
   `apellidos` varchar(250) DEFAULT NULL,
   `email` varchar(250) DEFAULT NULL,
+  `fcContra` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `contra` varchar(250) DEFAULT NULL,
   `telefono` varchar(10) DEFAULT NULL,
   `tipo` varchar(250) DEFAULT NULL,
@@ -110,12 +108,13 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`idUsuario`, `nombre`, `apellidos`, `email`, `contra`, `telefono`, `tipo`, `status`) VALUES
-(1, 'Pedro', 'paramo', 'pedroparamo@kc.com', 'c6ec1d943bf62dadd5dfd69cb1ec07a8', '4422101616', 'Colaborador', 1),
-(2, 'pedro', 'picapiedra', 'pedropicapiedra@kc.com', '7072a404f9fb33e1805dd6c122e233d3', '1232222222', 'Colaborador', 1),
-(3, 'jonathan', 'harker', 'harker@gmail.com', 'e80118aff3ed3bc6f99038f65bef881b', '2222222222', 'Admin', 1),
-(4, 'Wilhelmina', 'Murray', 'mina@gmail.com', '91b827e257eeae8e5989d961fe3011df', '2323234398', 'Admin', 1),
-(5, 'Hans', 'Andersen', 'hans@mail.con', '48d9b416bac940634de1a0ef6e41f995', '2222332365', 'Admin', 1);
+INSERT INTO `usuarios` (`idUsuario`, `nombre`, `apellidos`, `email`, `fcContra`, `contra`, `telefono`, `tipo`, `status`) VALUES
+(1, 'Pedro', 'paramos', 'pedroparamo@kc.com', '2022-07-02 12:30:11', 'c6ec1d943bf62dadd5dfd69cb1ec07a8', '4422101616', 'Admin', 1),
+(2, 'pedro', 'picapiedra', 'pedropicapiedra@kc.com', '2022-07-02 12:30:11', '7072a404f9fb33e1805dd6c122e233d3', '1232222222', 'Colaborador', 0),
+(3, 'jonathan', 'harker', 'harker@gmail.com', '2022-07-02 12:30:11', 'e80118aff3ed3bc6f99038f65bef881b', '2222222222', 'Admin', 1),
+(4, 'Wilhelmina', 'Murray', 'mina@gmail.com', '2022-07-02 12:30:11', '91b827e257eeae8e5989d961fe3011df', '2323234398', 'Admin', 1),
+(5, 'Hans', 'Andersen', 'hans@mail.con', '2022-07-02 12:30:11', '48d9b416bac940634de1a0ef6e41f995', '2222332365', 'Admin', 1),
+(6, 'Joseph', 'Haydn', 'joseph@mail.com', '2022-07-02 12:30:11', 'e807f1fcf82d132f9bb018ca6738a19f', '2222222222', 'Colaborador', 1);
 
 --
 -- Índices para tablas volcadas
@@ -181,13 +180,13 @@ ALTER TABLE `proyectos_usuarios`
 -- AUTO_INCREMENT de la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `idServ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idServ` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas

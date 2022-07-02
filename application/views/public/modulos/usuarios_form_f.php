@@ -31,14 +31,14 @@
                   </div>
 
                   <div class="form-group row">
-                    <label for="staticEmail" class="col-sm-2 col-form-label">Contrasena</label>
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Contraseña</label>
                     <div class="col-sm-10">
                         <input type="password" class="form-control" id="contra" value="">
                     </div>
                   </div>
 
                   <div class="form-group row">
-                    <label for="staticEmail" class="col-sm-2 col-form-label">Telefono</label>
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Teléfono </label>
                     <div class="col-sm-10">
                         <input type="number" class="form-control" id="telefono" value="<?php echo (isset($telefono)) ? $telefono : ''; ?>">
                     </div>

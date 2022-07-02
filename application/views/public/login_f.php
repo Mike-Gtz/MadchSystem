@@ -38,7 +38,6 @@
                   <div class="col-lg-12">
                     <fieldset>
                       <button type="submit" id="form-submit" class="filled-button btn-login">Iniciar Sesión</button>
-                      <button href="<?=base_url('admin/usuarios')?>" class="filled-button">Solo navegacion</button>
                     </fieldset>
                   </div>
                 </div>
