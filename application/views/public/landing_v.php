@@ -47,6 +47,7 @@
  
  <script type="text/javascript"> function base_url(complement = '') { return "<?= base_url() ?>"+complement } </script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 
 <?php if (isset($scripts)):
     foreach ($scripts as $script): ?>

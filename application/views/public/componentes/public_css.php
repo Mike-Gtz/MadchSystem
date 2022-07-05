@@ -9,3 +9,6 @@
     <link rel="stylesheet" href="<?=base_url('static/assets/css/owl.css')?>">
 
     <link href="<?=base_url('static/vendor/bootstrap/css/bootstrap.min.css')?>" rel="stylesheet" type="text/css" />
+
+    <!-- alerta -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">

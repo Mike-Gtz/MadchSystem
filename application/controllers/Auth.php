@@ -22,14 +22,34 @@ class Auth extends CI_Controller{
 				//Si existe el correo y se recibe el usuario completo
 				if($user->contra == md5($contra) && $user->status){
 						//La contraseña también coincide
-						$data = array( 
+
+						//fecha de vencimiento de contrasena por default falso
+						$vencimiento_contra = false;
+						//obtenemos la fecha actual
+						$now = date('Y-m-d H:i:s');
+
+						//si la fecha es mayor o igual a hoy hay que cambiarla
+						if($user->fcContra <= $now){
+							$vencimiento_contra = true;
+						}
+
+						// para guardar en la sesion
+						$contra_caduca = false;
+						if($user->fcContra < $now){
+							$contra_caduca = true;
+						}
+
+							$data = array( 
 							'idUsuario'	=> $user->idUsuario,
 							'nombre'	=> $user->nombre,
 							'apellidos'	=> $user->apellidos,
 							'email'		=> $email,
 							'tipo' 		=> $user->tipo,
+							'vencimiento_contra' => $user->fcContra,
+							'contra_caduca' => $contra_caduca,
 							'login' 	=> true
 						);
+					
 
 						$this->session->set_userdata($data);
 
@@ -37,6 +57,8 @@ class Auth extends CI_Controller{
 						$respuesta['resultado'] = true;
 						$respuesta['mensaje'] = 'Sesión iniciada';
 						$respuesta['usuario'] = $user;
+						$respuesta['vencimiento_contra'] = $vencimiento_contra;
+
 						echo json_encode($respuesta);
 					}
 				else{

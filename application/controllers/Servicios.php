@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Servicios extends CI_Controller {
+class Servicios extends PidePassword {
 
     public function __construct()
     {
@@ -26,6 +26,7 @@ class Servicios extends CI_Controller {
         $data['_APP']['fragment'] = $this->load->view('public/modulos/servicios_f', $data, TRUE);
         $data['_APP']['footer'] = $this->load->view('public/componentes/admin_footer_f', $data, TRUE);
         $data['scripts'][]          = 'app/private/modules/servicios';
+        $data['scripts'][]          = 'app/private/modules/general';
 
         $this->load->view('public/landing_v', $data, FALSE);
         //die(var_dump_format($data['registros'] ));
@@ -132,6 +133,7 @@ class Servicios extends CI_Controller {
         $data['_APP']['fragment']   = $this->load->view('public/modulos/servicios_form_f', $data, TRUE);
         $data['_APP']['footer']     = $this->load->view('public/componentes/admin_footer_f', $data, TRUE);
         $data['scripts'][]          = 'app/private/modules/servicios_form';
+        $data['scripts'][]          = 'app/private/modules/general';
 
         $this->load->view('public/landing_v', $data, FALSE);
         //die(var_dump_format($data['registros'] ));

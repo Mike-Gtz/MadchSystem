@@ -18,11 +18,38 @@ jQuery(document).ready(function ($) {
             success: function (json) {
 
                 if (json.resultado == true) {
-                    alert('Bienvenido');
-                    window.location.replace(base_url() + 'usuarios'); 
+                    var mensaje = 'Bienvenido ' + json.usuario['nombre'] + ', ' + json.mensaje;
+                    if(json.vencimiento_contra){
+                        mensaje += ', Por favor modifica tu contrasena para poder seguir haciendo uso de la plataforma.';
+                    }
+
+                    $.confirm({
+                        title: 'Bienvenido',
+                        content: mensaje,
+                        autoClose: false, 
+                        type: 'blue',
+                        icon: 'fa fa-spinner fa-spin',
+                        buttons: {
+                            aceptar: function () {
+                                window.location.replace(base_url() + 'usuarios'); 
+                              }
+                        }
+                    });
+
  
                 } else {
-                    alert(json.mensaje);
+                    $.confirm({
+                        title: 'Parece que hay un problema',
+                        content: json.mensaje,
+                        autoClose: false, 
+                        type: 'red',
+                        icon: 'fa fa-times',
+                        buttons: {
+                            aceptar: function () {
+
+                            }
+                        }
+                    });
                 }
             },
             error: function (ts) {

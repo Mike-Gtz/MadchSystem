@@ -26,7 +26,7 @@
                   <div class="form-group row">
                     <label for="staticEmail" class="col-sm-2 col-form-label">Estatus</label>
                     <div class="col-sm-10">
-                        <select class="form-select" id="status" aria-label="Default select example">
+                        <select class="form-control" id="status" aria-label="Default select example">
                             <option value="1">Activo</option>
                             <option value="0">Inhabilitado</option>
                         </select>

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Usuarios extends CI_Controller {
+class Usuarios extends PidePassword {
 
     public function __construct()
     {
@@ -26,6 +26,7 @@ class Usuarios extends CI_Controller {
         $data['_APP']['fragment'] = $this->load->view('public/modulos/usuarios_f', $data, TRUE);
         $data['_APP']['footer'] = $this->load->view('public/componentes/admin_footer_f', $data, TRUE);
         $data['scripts'][]          = 'app/private/modules/usuarios';
+        $data['scripts'][]          = 'app/private/modules/general';
 
         $this->load->view('public/landing_v', $data, FALSE);
         //die(var_dump_format($data['registros'] ));
@@ -136,6 +137,7 @@ class Usuarios extends CI_Controller {
         $data['_APP']['fragment']   = $this->load->view('public/modulos/usuarios_form_f', $data, TRUE);
         $data['_APP']['footer']     = $this->load->view('public/componentes/admin_footer_f', $data, TRUE);
         $data['scripts'][]          = 'app/private/modules/usuarios_form';
+        $data['scripts'][]          = 'app/private/modules/general';
 
         $this->load->view('public/landing_v', $data, FALSE);
         //die(var_dump_format($data['registros'] ));
@@ -164,12 +166,17 @@ class Usuarios extends CI_Controller {
                 $tipo       = $this->input->post('tipo'); 
                 $status     = $this->input->post('status'); 
 
+                //Para establecer cada cuanto se cambia la contrasena
+                $datetime = new \DateTime();
+                $datetime->add(new DateInterval('P6M'));
+ 
                 $arr_insert = array(
                     "nombre"        => $nombre,
                     "apellidos"     => $apellidos,
                     "email"         => $email,
                     "contra"        => md5($contra),      
                     "telefono"      => $telefono,
+                    "fcContra"      => $datetime->format('Y-m-d H:i:s'),
                     "tipo"          => $tipo,
                     "status"        => $status,  
 
@@ -229,7 +236,7 @@ class Usuarios extends CI_Controller {
  
             if ($this->form_validation->run() &&  $this->input->is_ajax_request()) {
  
-                $idUsuario     = $this->input->post('idUsuario');
+                $idUsuario  = $this->input->post('idUsuario');
                 $nombre     = $this->input->post('nombre');
                 $apellidos  = $this->input->post('apellidos'); 
                 $email      = $this->input->post('email');
@@ -237,6 +244,10 @@ class Usuarios extends CI_Controller {
                 $telefono   = $this->input->post('telefono');
                 $tipo       = $this->input->post('tipo'); 
                 $status     = $this->input->post('status'); 
+
+                //Para establecer cada cuanto se cambia la contrasena
+                $datetime = new \DateTime();
+                $datetime->add(new DateInterval('P6M'));
 
                 $arr_insert = array(
                     "nombre"        => $nombre,
@@ -249,7 +260,8 @@ class Usuarios extends CI_Controller {
                 );
 
                 if($contra != null){
-                    $arr_insert['contra'] = md5($contra);
+                    $arr_insert['contra']   = md5($contra);
+                    $arr_insert['fcContra'] = $datetime->format('Y-m-d H:i:s');
                 }
 
                 $this->load->model('usuarios_model');

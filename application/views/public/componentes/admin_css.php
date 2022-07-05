@@ -12,4 +12,6 @@
 
 
     <link rel="stylesheet" href="<?=base_url('static/admin/assets/css/style.css')?>">
+    <!-- Alerta -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 
