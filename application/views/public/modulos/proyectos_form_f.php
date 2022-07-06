@@ -27,8 +27,8 @@
                     <label for="staticEmail" class="col-sm-2 col-form-label">Estatus</label>
                     <div class="col-sm-10">
                         <select class="form-control" id="status" aria-label="Default select example">
-                            <option value="1">Activo</option>
-                            <option value="0">Inhabilitado</option>
+                            <option value="1" <?php echo (isset($status) && $status == 1) ? 'selected' : ''; ?>>Activo</option>
+                            <option value="0" <?php echo (isset($status) && $status == 0) ? 'selected' : ''; ?>>Inhabilitado</option>
                         </select>
                     </div>
                   </div>
