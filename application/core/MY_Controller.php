@@ -73,18 +73,7 @@ class PidePassword extends MY_Controller
 {
     
     function __construct()
-    /*{
-        parent::__construct();
-                $this->load->model("UsuarioModelo");
-        $valido = $this->UsuarioModelo->revisaSesion($this->session->userdata('username'),$this->session->userdata('sesion'));
-        //die(print_r($this->router));
 
-        if($valido === FALSE && $this->router->class == 'seguridad' && $this->router->method != 'index')
-            redirect(base_url()."index.php/seguridad/index");
-        else if($valido === FALSE && $this->router->class != 'seguridad')
-            redirect(base_url()."index.php/seguridad/index");
-
-    }*/
 {
         parent::__construct();
         $valido = FALSE;
@@ -102,7 +91,6 @@ class PidePassword extends MY_Controller
 
             $valido = TRUE;
         }
-        //die(print_r($this->router));
 
         if($valido === FALSE && $this->router->class == 'seguridad' && $this->router->method != 'index')
             redirect(base_url()."acceso/login");

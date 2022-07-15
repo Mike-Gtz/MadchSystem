@@ -40,7 +40,14 @@ class Usuarios_model extends CI_Model {
         $query = $this->db->query($cmd);
         return ($query->num_rows() >= 1) ? $query->result() : NULL;
     }
- 
+
+    public function get_all_status($statusId)
+    {
+        $cmd = "SELECT * FROM usuarios where status =".$statusId;
+
+        $query = $this->db->query($cmd);
+        return ($query->num_rows() >= 1) ? $query->result() : NULL;
+    }  
 
      public function get_by_id($id)
     {

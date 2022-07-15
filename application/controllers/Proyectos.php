@@ -96,6 +96,109 @@ class Proyectos extends PidePassword {
                 }
         }
 
+
+    public function deleteservicio()
+    { 
+        json_header();
+        /*if (!is_null($this->permiso_id)) {*/
+
+            $this->form_validation->set_rules('id', 'id', 'trim|numeric|max_length[7]|required'); 
+ 
+            if ($this->form_validation->run() &&  $this->input->is_ajax_request()) {
+ 
+                $id        = $this->input->post('id');
+ 
+                $this->load->model('proyectos_servicios_model');
+                $is_data_deleted = $this->proyectos_servicios_model->delete_by_id($id);
+                    if ($is_data_deleted) {
+                        echo json_encode(
+                            array(
+                                "response_code" => 200,
+                                "response_type" => 'success',
+                                "message"       => "El registro fue eliminado",
+                            )
+                        );
+
+                    }
+
+                    /*Si no podemos editar y el modelo retorna una excepcion*/
+                    else {
+                         echo json_encode(
+                            array(
+                                "response_code" => 500,
+                                "response_type" => 'error',
+                                "message"       => $is_data_deleted,
+                            )
+                        );
+                    }
+
+                }
+
+                /*Si la validación de campos es incorrecta*/
+                else {
+                    $err = validation_errors();
+                    echo json_encode(
+                        array(
+                            "response_code" => 403,
+                            "response_type" => 'error',
+                            "message"       => 'Bad Request '.$err,
+                            "error"         => $err,
+                        )
+                    );
+                }
+        }
+
+    public function deleteusuario()
+    { 
+        json_header();
+        /*if (!is_null($this->permiso_id)) {*/
+
+            $this->form_validation->set_rules('id', 'id', 'trim|numeric|max_length[7]|required'); 
+ 
+            if ($this->form_validation->run() &&  $this->input->is_ajax_request()) {
+ 
+                $id        = $this->input->post('id');
+ 
+                $this->load->model('proyectos_usuarios_model');
+                $is_data_deleted = $this->proyectos_usuarios_model->delete_by_id($id);
+                    if ($is_data_deleted) {
+                        echo json_encode(
+                            array(
+                                "response_code" => 200,
+                                "response_type" => 'success',
+                                "message"       => "El registro fue eliminado",
+                            )
+                        );
+
+                    }
+
+                    /*Si no podemos editar y el modelo retorna una excepcion*/
+                    else {
+                         echo json_encode(
+                            array(
+                                "response_code" => 500,
+                                "response_type" => 'error',
+                                "message"       => $is_data_deleted,
+                            )
+                        );
+                    }
+
+                }
+
+                /*Si la validación de campos es incorrecta*/
+                else {
+                    $err = validation_errors();
+                    echo json_encode(
+                        array(
+                            "response_code" => 403,
+                            "response_type" => 'error',
+                            "message"       => 'Bad Request '.$err,
+                            "error"         => $err,
+                        )
+                    );
+                }
+        }
+
     public function project()
     { 
         $this->load->model('proyectos_model');
@@ -105,14 +208,34 @@ class Proyectos extends PidePassword {
         $data = array();       
 
         $data['editable']           = false;
-        
+
+        $this->load->model('servicios_model');
+        $servicios = array();
+        $servicios = $this->servicios_model->get_all_status(1);
+        $data['servicios_disponibles']          = $servicios; 
+
+        $this->load->model('usuarios_model');
+        $usuarios = array();
+        $usuarios = $this->usuarios_model->get_all_status(1);
+        $data['usuarios_disponibles']          = $usuarios; 
+
+
         if($id != null ){
             $data['id']             = $id;
             //consultar usuario
             $is_user = $this->proyectos_model->get_by_id($id);
             if($is_user != null && $is_user!= false){
- 
- 
+
+            $this->load->model('proyectos_servicios_model');
+            $servicios_proyecto = array();
+            $servicios_proyecto = $this->proyectos_servicios_model->get_all_proyecto($is_user->idProyecto);
+            $data['servicios_proyecto']          = $servicios_proyecto;  
+
+            $this->load->model('proyectos_usuarios_model');
+            $usuarios_proyecto = array();
+            $usuarios_proyecto = $this->proyectos_usuarios_model->get_all_proyecto($is_user->idProyecto);
+            $data['usuarios_proyecto']          = $usuarios_proyecto;  
+
             $data['idProyecto']     = $is_user->idProyecto;
             $data['nombreProyecto'] = $is_user->nombreProyecto;
             $data['descripcion']    = $is_user->descripcion;
@@ -150,9 +273,12 @@ class Proyectos extends PidePassword {
  
             if ($this->form_validation->run() &&  $this->input->is_ajax_request()) {
  
-                $nombreProyecto     = $this->input->post('nombreProyecto');
-                $descripcion  = $this->input->post('descripcion'); 
-                $status     = $this->input->post('status'); 
+                $nombreProyecto = $this->input->post('nombreProyecto');
+                $descripcion    = $this->input->post('descripcion'); 
+                $status         = $this->input->post('status'); 
+
+                $array_servicios    = array_filter(explode(", ", $this->input->post('servicios')));           
+                $array_usuarios     = array_filter(explode(", ", $this->input->post('usuarios')));  
 
                 $arr_insert = array(
                     "nombreProyecto"    => $nombreProyecto,
@@ -164,6 +290,53 @@ class Proyectos extends PidePassword {
                 $this->load->model('proyectos_model');
                 $is_data_insert = $this->proyectos_model->create($arr_insert, true );
                     if ($is_data_insert) {
+
+
+
+                        if(!empty($array_servicios)){
+                            /*Si se inserta el registro del proyecto se agregan los servicio  y usuarios*/
+                            foreach ($array_servicios as $row) {
+                                //Generar el array del servicio
+                                $proyectos_servicios = 
+                                    array(
+                                        "idProyecto" => $is_data_insert,
+                                        "idServ" => $row,
+                                        "status" => 1,
+                                    );
+
+                                //validar que no exista
+                                $this->load->model('proyectos_servicios_model');    
+                                if(!$this->proyectos_servicios_model->get($proyectos_servicios)){
+                                    //si no existe es falso, entonces se registra
+                                    $this->proyectos_servicios_model->create($proyectos_servicios, $is_data_insert);    
+                                } 
+
+                            }                            
+                        }
+
+                        //Inserta usuarios
+                        if(!empty($array_usuarios)){
+                            /*Si se inserta el registro del proyecto se agregan los servicio  y usuarios*/
+                            foreach ($array_usuarios as $row) {
+                                //Generar el array del servicio
+                                $proyectos_usuarios = 
+                                    array(
+                                        "idProyecto" => $is_data_insert,
+                                        "idUsuario" => $row,
+                                        "status" => 1,
+                                    );
+
+                                //validar que no exista
+                                $this->load->model('proyectos_usuarios_model');    
+                                if(!$this->proyectos_usuarios_model->get($proyectos_usuarios)){
+                                    //si no existe es falso, entonces se registra
+                                    $this->proyectos_usuarios_model->create($proyectos_usuarios, $is_data_insert);    
+                                }   
+                                
+                            }                            
+                        }
+
+
                         echo json_encode(
                             array(
                                 "response_code" => 200,
@@ -214,7 +387,9 @@ class Proyectos extends PidePassword {
                 $idProyecto     = $this->input->post('idProyecto');
                 $nombreProyecto = $this->input->post('nombreProyecto');
                 $descripcion    = $this->input->post('descripcion'); 
-                $status     = $this->input->post('status'); 
+                $status         = $this->input->post('status'); 
+                $array_servicios    = array_filter(explode(", ", $this->input->post('servicios')));           
+                $array_usuarios     = array_filter(explode(", ", $this->input->post('usuarios')));  
 
                 $arr_insert = array(
                     "nombreProyecto"    => $nombreProyecto,
@@ -226,6 +401,50 @@ class Proyectos extends PidePassword {
                 $this->load->model('proyectos_model');
                 $is_data_insert = $this->proyectos_model->update_by_id($arr_insert, $idProyecto );
                     if ($is_data_insert) {
+                        
+                        if(!empty($array_servicios)){
+                            /*Si se inserta el registro del proyecto se agregan los servicio  y usuarios*/
+                            foreach ($array_servicios as $row) {
+                                //Generar el array del servicio
+                                $proyectos_servicios = 
+                                    array(
+                                        "idProyecto" => $idProyecto,
+                                        "idServ" => $row,
+                                        "status" => 1,
+                                    );
+
+                                //validar que no exista
+                                $this->load->model('proyectos_servicios_model');    
+                                if(!$this->proyectos_servicios_model->get($proyectos_servicios)){
+                                    //si no existe es falso, entonces se registra
+                                    $this->proyectos_servicios_model->create($proyectos_servicios, $idProyecto);    
+                                } 
+
+                            }                            
+                        }
+
+                        //Inserta usuarios
+                        if(!empty($array_usuarios)){
+                            /*Si se inserta el registro del proyecto se agregan los servicio  y usuarios*/
+                            foreach ($array_usuarios as $row) {
+                                //Generar el array del servicio
+                                $proyectos_usuarios = 
+                                    array(
+                                        "idProyecto" => $idProyecto,
+                                        "idUsuario" => $row,
+                                        "status" => 1,
+                                    );
+
+                                //validar que no exista
+                                $this->load->model('proyectos_usuarios_model');    
+                                if(!$this->proyectos_usuarios_model->get($proyectos_usuarios)){
+                                    //si no existe es falso, entonces se registra
+                                    $this->proyectos_usuarios_model->create($proyectos_usuarios, $idProyecto);    
+                                }   
+                                
+                            }                            
+                        }
+
                         echo json_encode(
                             array(
                                 "response_code" => 200,
