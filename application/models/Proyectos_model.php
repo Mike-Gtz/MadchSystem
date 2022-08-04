@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Proyectos_model extends CI_Model {
- 
+ //
 
     public function create($entry, $return_id = FALSE)
     {

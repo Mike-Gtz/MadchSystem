@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Proyectos extends PidePassword {
-
+//04/08
     public function __construct()
     {
         parent::__construct();

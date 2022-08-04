@@ -1,5 +1,5 @@
 jQuery(document).ready(function ($) {
- 
+  
   //test
      $(document).on(
         'click',
